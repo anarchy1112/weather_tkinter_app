@@ -3,58 +3,57 @@ import datetime
 import requests
 import json
 
-
-
-
-
 base_url='https://api.openweathermap.org/data/2.5'
 lat=45.2396
 lon=19.8227
 
 api_key='bc465a524e6f688aea578403df822ba2'
 
-def current_weather(i):
-    pass
-
-def hourly_forecast(i):
-    pass
-
-def daily_forecast(i):
-    pass
-
-
-
-
 current_weather_endpoint='/weather?lat=' + str(lat) + '&lon=' + str(lon) + '&appid=' + api_key + '&units=metric'
-
 current_weather_url=base_url+current_weather_endpoint
 
-request=requests.get(current_weather_url)
-result=request.json()
-
-# print(json.dumps(result, sort_keys=True, indent=4))
-sunrise =result['sys']['sunrise']
-sunset =result['sys']['sunset']
-
-print('Vreme u '+ result['name'])
-print('Temperatura je ' +str(result['main']['temp']) + ' stepeni celzijusa')
-print('Vreme je ' + result['weather'][0]['description'])
-print('Izlazak sunca u '+ datetime.datetime.utcfromtimestamp(sunrise).strftime('%d.%m.%Y. %H:%M:%S'))
-print('Zalazak sunca u '+ datetime.datetime.utcfromtimestamp(sunset).strftime('%d.%m.%Y. %H:%M:%S'))
-
 forecast_endpoint='/forecast?lat=' + str(lat) + '&lon=' + str(lon) + '&appid=' + api_key + '&units=metric'
-
 forecast_url = base_url + forecast_endpoint
 
-request = requests.get(forecast_url)
-result=request.json()
+request_current = requests.get(current_weather_url)
+result_current = request_current.json()
 
-# print(json.dumps(result, sort_keys=True, indent=4))
+request_forecast = requests.get(forecast_url)
+result_forecast = request_forecast.json()
 
-for i in range(9):
-    ts=result['list'][i]['dt']
-    time= datetime.datetime.utcfromtimestamp(ts).strftime('%d.%m.%Y. %H:%M:%S')
-    print(result['city']['name'] + ' weather at '+ time)
-    print('Temperature will be ' +str(result['list'][i]['main']['temp']) + ' degrees celsius.')
-    print('Weather will be '+ result['list'][i]['weather'][0]['description'])
-    print()
+def current_weather():
+    sunrise = result_current['sys']['sunrise']
+    sunset = result_current['sys']['sunset']
+    result=[]
+    result.append(f"{result_current['name']}")
+    result.append(f"Temp {result_current['main']['temp']} degrees Celsius")
+    result.append(f"Weather is {result_current['weather'][0]['description']}")
+    result.append(f"Sunrise at {datetime.datetime.utcfromtimestamp(sunrise).strftime('%d.%m.%Y. %H:%M:%S')}")
+    result.append(f"Sunset at {datetime.datetime.utcfromtimestamp(sunset).strftime('%d.%m.%Y. %H:%M:%S')}")
+    return result
+
+
+def hourly_forecast(i):
+
+    ts = result_forecast['list'][i]['dt']
+    time = datetime.datetime.utcfromtimestamp(ts).strftime('%d.%m.%Y. %H:%M:%S')
+    result1=[]
+    result1.append(f"{result_forecast['city']['name']} weather at {time}")
+    result1.append(f"Temperature will be {result_forecast['list'][i]['main']['temp']} degrees celsius.")
+    result1.append(f"Weather will be {result_forecast['list'][i]['weather'][0]['description']}")
+    return result1
+
+
+def daily_forecast(i):
+    request = requests.get(forecast_url)
+    result = request.json()
+    ts = result['list'][i]['dt']
+    time = datetime.datetime.utcfromtimestamp(ts).strftime('%d.%m.%Y. %H:%M:%S')
+    result2 = []
+    result2.append(f"{result_forecast['city']['name']} weather at {time}")
+    result2.append(f"Temp will be {result_forecast['list'][i]['main']['temp']} degrees celsius.")
+    result2.append(f"Weather is {result_forecast['list'][i]['weather'][0]['description']}")
+    return result2
+
+
+
