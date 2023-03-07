@@ -38,8 +38,9 @@ def hourly_forecast(i):
     ts = result_forecast['list'][i]['dt']
     time = datetime.datetime.utcfromtimestamp(ts).strftime('%d.%m.%Y. %H:%M:%S')
     result1=[]
-    result1.append(f"{result_forecast['city']['name']} weather at {time}")
-    result1.append(f"Temperature will be {result_forecast['list'][i]['main']['temp']} degrees celsius.")
+    result1.append(f"{result_forecast['city']['name']}")
+    result1.append(f"Weather at {time}")
+    result1.append(f"Temp will be {result_forecast['list'][i]['main']['temp']} degrees celsius.")
     result1.append(f"Weather will be {result_forecast['list'][i]['weather'][0]['description']}")
     return result1
 
@@ -50,10 +51,8 @@ def daily_forecast(i):
     ts = result['list'][i]['dt']
     time = datetime.datetime.utcfromtimestamp(ts).strftime('%d.%m.%Y. %H:%M:%S')
     result2 = []
-    result2.append(f"{result_forecast['city']['name']} weather at {time}")
+    result2.append(f"{result_forecast['city']['name']}")
+    result2.append(f"Weather at {time}")
     result2.append(f"Temp will be {result_forecast['list'][i]['main']['temp']} degrees celsius.")
-    result2.append(f"Weather is {result_forecast['list'][i]['weather'][0]['description']}")
+    result2.append(f"Weather will be {result_forecast['list'][i]['weather'][0]['description']}")
     return result2
-
-
-
